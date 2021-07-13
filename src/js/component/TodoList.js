@@ -8,14 +8,18 @@ export const TodoList = () => {
 		"Progam a website"
 	]);
 
-	let createdList = listArray.map((item, index) => {
-		return <li key={index}>{item}</li>;
+	let createdList = listArray.map((item, i) => {
+		return (
+			<li key={i}>
+				{item} <button onClick="">X</button>
+			</li>
+		);
 	});
 
 	return (
 		<>
 			<h1>To do List</h1>
-			<input type="text" onChange={event => event.target.value} />
+			<input placeholder="Add a task here" type="text" />
 			<ul>{createdList}</ul>
 		</>
 	);
