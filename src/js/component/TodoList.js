@@ -27,29 +27,33 @@ export const TodoList = () => {
 
 	// Create variable that will create a list HTML with a given array
 	let createdList = listArray.map((item, i) => {
-		return (
-			<li key={i}>
+		return listArray.length >= 1 ? (
+			<li className="list-group-item" key={i}>
 				{item} <button onClick={() => removeItem(i)}>X</button>
 			</li>
+		) : (
+			<li className="list-group-item">No tasks, add a task</li>
 		);
 	});
 
 	// Below returns structure of ToDo List
 	return (
 		<div>
-			<h1 className="mx-auto">To do List</h1>
+			<h1 className="text-center">To Do List</h1>
 			<input
+				className="m-2 w-100"
 				placeholder="Add a task here"
 				type="text"
 				onKeyDown={addItem}
-				className="mx-auto"
 			/>
-			<ul className="mx-auto">{createdList}</ul>
-			<p>
-				{" "}
-				{listArray.length} {listArray.length == 1 ? "item" : "items"}{" "}
-				left
-			</p>
+			<ul className="list-group m-2">
+				{createdList}
+				<li className="list-group-item p-1 pl-4">
+					{" "}
+					{listArray.length}{" "}
+					{listArray.length == 1 ? "item" : "items"} left
+				</li>
+			</ul>
 		</div>
 	);
 };
