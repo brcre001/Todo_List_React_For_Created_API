@@ -8,6 +8,7 @@ export const TodoList = () => {
 		"Catch up on videos",
 		"Progam a website"
 	]);
+	const [isShown, setIsShown] = useState({ state: false, index: 0 });
 
 	// This is to add a task to the ToDo list
 	const addItem = event => {
@@ -27,31 +28,45 @@ export const TodoList = () => {
 
 	// Create variable that will create a list HTML with a given array
 	let createdList = listArray.map((item, i) => {
-		return listArray.length >= 1 ? (
-			<li className="list-group-item" key={i}>
-				{item} <button onClick={() => removeItem(i)}>X</button>
+		return (
+			<li
+				className="list-group-item align-middle"
+				key={i}
+				onMouseEnter={() => setIsShown({ state: true, index: i })}
+				onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
+				<span className="py-4">{item}</span>
+				{isShown.state == true && isShown.index == i ? (
+					<button
+						className="btn btn-danger float-right"
+						onClick={() => removeItem(i)}>
+						X
+					</button>
+				) : (
+					""
+				)}
 			</li>
-		) : (
-			<li className="list-group-item">No tasks, add a task</li>
 		);
 	});
 
 	// Below returns structure of ToDo List
 	return (
-		<div>
+		<div className="p-2">
 			<h1 className="text-center">To Do List</h1>
 			<input
-				className="m-2 w-100"
+				className="w-100 mb-2"
 				placeholder="Add a task here"
 				type="text"
 				onKeyDown={addItem}
 			/>
-			<ul className="list-group m-2">
-				{createdList}
-				<li className="list-group-item p-1 pl-4">
-					{" "}
-					{listArray.length}{" "}
-					{listArray.length == 1 ? "item" : "items"} left
+			<ul className="list-group">
+				{listArray.length >= 1 ? (
+					createdList
+				) : (
+					<li className="list-group-item">No tasks, add a task</li>
+				)}
+				<li className="list-group-item p-1">
+					{listArray.length}
+					{listArray.length == 1 ? " item" : " items"} left
 				</li>
 			</ul>
 		</div>
