@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 export const TodoList = () => {
-	// Setting up an array with some ToDo items
+	// Setting up useState
 	const [listArray, setListArray] = useState([
 		"Do homework",
 		"Catch up on videos",
@@ -30,11 +30,11 @@ export const TodoList = () => {
 	let createdList = listArray.map((item, i) => {
 		return (
 			<li
-				className="list-group-item align-middle"
+				className="list-group-item align-middle h-"
 				key={i}
 				onMouseEnter={() => setIsShown({ state: true, index: i })}
 				onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
-				<span className="py-4">{item}</span>
+				<span className="py-4 mt-2">{item}</span>
 				{isShown.state == true && isShown.index == i ? (
 					<button
 						className="btn btn-danger float-right"
