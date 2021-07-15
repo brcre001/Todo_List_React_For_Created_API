@@ -6,30 +6,46 @@ export const TodoList = () => {
 	const [listArray, setListArray] = useState([]);
 	const [isShown, setIsShown] = useState({ state: false, index: 0 });
 
+	// UseEffect for retrieving stored values from database on mount
 	useEffect(() => {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001")
 			.then(resp => {
-				console.log(resp.ok); // will be true if the response is successfull
-				console.log(resp.status); // the status code = 200 or code = 400 etc.
+				// console.log(resp.ok); // will be true if the response is successfull
+				// console.log(resp.status); // the status code = 200 or code = 400 etc.
 				return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
 			})
 			.then(data => {
 				//here is were your code should start after the fetch finishes
-				console.log(data); //this will print on the console the exact object received from the server
+				// console.log(data); //this will print on the console the exact object received from the server
 				setListArray(data);
 			})
 			.catch(error => {
 				//error handling
-				console.log(error);
+				console.log("This is an error: ", error);
 			});
 	}, []);
+
+	// UseEffect for updating array values
+	useEffect(() => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001", {
+			method: "PUT", // or 'POST'
+			body: JSON.stringify(listArray), // data can be `string` or {object}!
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(response => console.log("Success:", JSON.stringify(response)))
+			.catch(error => console.error("Error:", error));
+	}, [listArray]);
 
 	// This is to add a task to the ToDo list
 	const addItem = event => {
 		if (event.keyCode === 13) {
-			let userInput = event.target.value;
+			let userInput = { label: event.target.value, done: false };
 			const newTodo = [...listArray, userInput];
 			setListArray(newTodo);
+			console.log(newTodo);
 			event.target.value = "";
 		}
 	};
