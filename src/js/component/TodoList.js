@@ -30,7 +30,7 @@ export const TodoList = () => {
 	let createdList = listArray.map((item, i) => {
 		return (
 			<li
-				className="list-group-item align-middle h-"
+				className="list-group-item"
 				key={i}
 				onMouseEnter={() => setIsShown({ state: true, index: i })}
 				onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
