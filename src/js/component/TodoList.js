@@ -85,7 +85,7 @@ export const TodoList = () => {
 		<div className="p-2">
 			<h1 className="text-center">To Do List</h1>
 			<input
-				className="w-100 mb-2"
+				className="w-100 mb-2 rounded"
 				placeholder="Add a task here"
 				type="text"
 				onKeyDown={addItem}
