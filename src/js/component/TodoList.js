@@ -25,7 +25,7 @@ export const TodoList = () => {
 			});
 	}, []);
 
-	// UseEffect for updating array values
+	// UseEffect for updating Todo List array values
 	useEffect(() => {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001", {
 			method: "PUT", // or 'POST'
@@ -39,7 +39,7 @@ export const TodoList = () => {
 			.catch(error => console.error("Error:", error));
 	}, [listArray]);
 
-	// This is to add a task to the ToDo list
+	// Function to add Todo List item when enter key is pressed
 	const addItem = event => {
 		if (event.keyCode === 13) {
 			let userInput = { label: event.target.value, done: false };
@@ -50,13 +50,13 @@ export const TodoList = () => {
 		}
 	};
 
-	// This is the remove item function that will be called when button is clicked
+	// Function to remove Todo List item, added to button
 	const removeItem = index => {
 		const newArray = listArray.filter((item, i) => i != index);
 		setListArray(newArray);
 	};
 
-	// Create variable that will create a list HTML with a given array
+	// Variable that will create a HTML list with a given array
 	let createdList = listArray.map((item, i) => {
 		return (
 			<li
@@ -65,6 +65,8 @@ export const TodoList = () => {
 				onMouseEnter={() => setIsShown({ state: true, index: i })}
 				onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
 				<span className="py-4 mt-2">{item.label}</span>
+
+				{/* This shows the delete button when mouse is hovered over specific list item */}
 				{isShown.state == true && isShown.index == i ? (
 					<button
 						className="btn btn-danger float-right"
@@ -78,7 +80,7 @@ export const TodoList = () => {
 		);
 	});
 
-	// Below returns structure of ToDo List
+	// This returns the structure of the webpage
 	return (
 		<div className="p-2">
 			<h1 className="text-center">To Do List</h1>
