@@ -5,14 +5,23 @@ export const TodoList = () => {
 	// Setting up useState
 	const [listArray, setListArray] = useState([]);
 	const [isShown, setIsShown] = useState({ state: false, index: 0 });
+	const [message, setMessage] = useState("");
 
 	// UseEffect for retrieving stored values from database on mount
 	useEffect(() => {
 		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001")
 			.then(resp => {
+				console.log(resp.status);
+				if (resp.status >= 200 && resp.status < 300) {
+					return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
+				} else {
+					alert(
+						`This is a client error, its your fault this is a ${resp.status}`
+					);
+					throw Error(`${resp.ok} ${resp.status}`);
+				}
 				// console.log(resp.ok); // will be true if the response is successfull
 				// console.log(resp.status); // the status code = 200 or code = 400 etc.
-				return resp.json(); // (returns promise) will try to parse the result as json as return a promise that you can .then for results
 			})
 			.then(data => {
 				//here is were your code should start after the fetch finishes
@@ -50,6 +59,17 @@ export const TodoList = () => {
 		}
 	};
 
+	// Function to make a line through a done item
+	const doneItem = index => {
+		let newArray = listArray.map((item, i) => {
+			if (i == index) {
+				item.done = !item.done;
+			}
+			return item;
+		});
+		setListArray(newArray);
+	};
+
 	// Function to remove Todo List item, added to button
 	const removeItem = index => {
 		const newArray = listArray.filter((item, i) => i != index);
@@ -64,15 +84,24 @@ export const TodoList = () => {
 				key={i}
 				onMouseEnter={() => setIsShown({ state: true, index: i })}
 				onMouseLeave={() => setIsShown({ state: false, index: 0 })}>
-				<span className="py-4 mt-2">{item.label}</span>
+				<span className={`py-4 mt-2 ${item.done && "doneTask"}`}>
+					{item.label}
+				</span>
 
 				{/* This shows the delete button when mouse is hovered over specific list item */}
 				{isShown.state == true && isShown.index == i ? (
-					<button
-						className="btn btn-danger float-right"
-						onClick={() => removeItem(i)}>
-						X
-					</button>
+					<>
+						<button
+							className="btn btn-danger float-right ml-1"
+							onClick={() => removeItem(i)}>
+							<i className="fas fa-trash-alt"></i>
+						</button>
+						<button
+							className="btn btn-success float-right"
+							onClick={() => doneItem(i)}>
+							<i className="fas fa-check"></i>
+						</button>{" "}
+					</>
 				) : (
 					""
 				)}
