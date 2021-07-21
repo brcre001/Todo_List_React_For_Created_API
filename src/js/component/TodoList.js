@@ -7,9 +7,12 @@ export const TodoList = () => {
 	const [isShown, setIsShown] = useState({ state: false, index: 0 });
 	const [message, setMessage] = useState("");
 
+	// Setting URL into a variable for use
+	const apiURL = "https://assets.breatheco.de/apis/fake/todos/user/brcre001";
+
 	// UseEffect for retrieving stored values from database on mount
 	useEffect(() => {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001")
+		fetch(apiURL)
 			.then(resp => {
 				console.log(resp.status);
 				if (resp.status >= 200 && resp.status < 300) {
@@ -36,7 +39,7 @@ export const TodoList = () => {
 
 	// UseEffect for updating Todo List array values
 	useEffect(() => {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/brcre001", {
+		fetch(apiURL, {
 			method: "PUT", // or 'POST'
 			body: JSON.stringify(listArray), // data can be `string` or {object}!
 			headers: {
