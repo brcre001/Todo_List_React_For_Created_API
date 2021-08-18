@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 
 export const TodoList = () => {
 	// Setting up useState
@@ -7,72 +6,47 @@ export const TodoList = () => {
 	const [isShown, setIsShown] = useState({ state: false, index: 0 });
 
 	// Setting URL into a variable for use
-	const apiURL = "https://3245-orange-cat-f4q5ivog.ws-us14.gitpod.io";
+	const apiURL = "https://3245-orange-cat-f4q5ivog.ws-us14.gitpod.io/todos";
 
-	// UseEffect for retrieving stored values from database on mount
-	useEffect(() => {
-		initList();
+	useEffect(async () => {
+		const response = await fetch(apiURL);
+		const data = await response.json();
+		setListArray(data);
 	}, []);
 
-	// UseEffect for updating Todo List array values
-	useEffect(() => {
-		updateList();
-	}, [listArray]);
-
-	/* SET OF FUNCTIONS USING ASYNC */
-	const initList = async () => {
-		const response = await fetch(apiURL);
+	const addTodo = async todo => {
 		try {
+			const response = await fetch(apiURL, {
+				method: "POST",
+				body: JSON.stringify(todo),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
 			const data = await response.json();
 			setListArray(data);
 		} catch (error) {
-			throw new Error(error);
+			console.log(error);
 		}
 	};
 
-	// Will update items as they are changed
-	const updateList = async () => {
-		const response = await fetch(apiURL, {
-			method: "PUT", // or 'POST'
-			body: JSON.stringify(listArray), // data can be `string` or {object}!
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
+	const deleteTodo = async position => {
 		try {
+			const response = await fetch(`${apiURL}/${position}`, {
+				method: "DELETE"
+			});
 			const data = await response.json();
-			console.log("Success:", JSON.stringify(data));
+			setListArray(data);
 		} catch (error) {
-			throw new Error(error);
+			console.log(error);
 		}
 	};
 
-	// Function to add Todo List item when enter key is pressed
 	const addItem = event => {
 		if (event.keyCode === 13) {
 			let userInput = { label: event.target.value, done: false };
-			const newTodo = [...listArray, userInput];
-			setListArray(newTodo);
-			console.log(newTodo);
-			event.target.value = "";
+			addTodo(userInput);
 		}
-	};
-
-	// Function to make a line through a done item
-	const doneItem = index => {
-		let newArray = listArray.map((item, i) => {
-			if (i == index) {
-				item.done = !item.done;
-			}
-			return item;
-		});
-		setListArray(newArray);
-	};
-
-	// Function to remove Todo List item, added to button
-	const removeItem = index => {
-		const newArray = listArray.filter((item, i) => i != index);
-		setListArray(newArray);
 	};
 
 	// Variable that will create a HTML list with a given array
@@ -92,12 +66,10 @@ export const TodoList = () => {
 					<>
 						<button
 							className="btn btn-danger float-right ml-1"
-							onClick={() => removeItem(i)}>
+							onClick={() => deleteTodo(i)}>
 							<i className="fas fa-trash-alt"></i>
 						</button>
-						<button
-							className="btn btn-success float-right"
-							onClick={() => doneItem(i)}>
+						<button className="btn btn-success float-right">
 							<i className="fas fa-check"></i>
 						</button>{" "}
 					</>
