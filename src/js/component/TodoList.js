@@ -42,6 +42,10 @@ export const TodoList = () => {
 		}
 	};
 
+	// This will be used to change the done key
+	// to either True or False
+	const changeTodo = async position => {}
+
 	const addItem = event => {
 		if (event.keyCode === 13) {
 			let userInput = { label: event.target.value, done: false };
