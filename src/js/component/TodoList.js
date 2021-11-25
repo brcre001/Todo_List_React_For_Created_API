@@ -6,12 +6,16 @@ export const TodoList = () => {
 	const [isShown, setIsShown] = useState({ state: false, index: 0 });
 
 	// Setting URL into a variable for use
-	const apiURL = "https://3245-orange-cat-f4q5ivog.ws-us14.gitpod.io/todos";
+	const apiURL = "https://8000-copper-slug-zzx1gf65.ws-us17.gitpod.io/todos";
 
-	useEffect(async () => {
+	const fetchData = async () => {
 		const response = await fetch(apiURL);
 		const data = await response.json();
 		setListArray(data);
+	};
+
+	useEffect(() => {
+		fetchData();
 	}, []);
 
 	const addTodo = async todo => {
@@ -44,7 +48,7 @@ export const TodoList = () => {
 
 	// This will be used to change the done key
 	// to either True or False
-	const changeTodo = async position => {}
+	const changeTodo = async position => {};
 
 	const addItem = event => {
 		if (event.keyCode === 13) {
